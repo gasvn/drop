@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drop</title>
+  <meta charset="utf-8">
+  {% load static %}   
+  <link rel="stylesheet" type="text/css" href="{% static 'drop/css/messenger.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'drop/css/messenger-theme-future.css' %}" />
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{% static 'drop/js/messenger.min.js' %}"></script>
+  
+</head>
+<body>
+
+<div class="container">
+
+  <div class="jumbotron">
+    <h2>Drop the content.</h2>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+	 <form role="form">
+     <div class="form-group">
+     <label for="name">ID</label>
+     <input type="text" class="form-control" id="id" name="id" placeholder="ID here.">
+     </div>
+     </form>
+    </div>
+    <div class="col-sm-8">
+     <form role="form">
+     <div class="form-group">
+     <label for="name">Content</label>
+     <textarea  class="form-control" id="content" name="content" placeholder="Content here."  rows=10   cols=14   onpropertychange= "this.style.posHeight=this.scrollHeight "></textarea>
+
+     </div>
+     </form>
+    </div>
+     <div class="col-sm-8">
+        <input class="btn btn-default" type="button" id="sub" value="SUBMIT">
+        <input class="btn btn-default" type="button" id="qrcode" value="QRCODE">
+    </div>
+    <div class="col-sm-8",  id="imgs">
+      <img id="img"/>
+    </div>
+
+
+
+     
+
+
+
+<script>
+     $._messengerDefaults = {
+      extraClasses: 'messenger-fixed messenger-theme-future messenger-on-bottom messenger-on-right'
+    }
+    msg=$.globalMessenger().post("Welcome.");  
+
+   $(document).ready(function(){
+      $("#sub").click(function(){
+        var a = $("#id").val();
+        var b = $("#content").val();
+        if(a==""){
+            a="isEmpty";
+        }
+        $.get("submit/",{'a':a,'b':b}, function(ret){
+            if(ret.cmd=="load"){
+              msg.update("Message load succeed.")
+                $('#content').val(ret.NoteContent)
+            }else{
+              msg.update("NoteID: "+ret.NoteId)
+              $('#id').val(ret.NoteId)
+            }
+        })
+      });
+
+      $("#qrcode").click(function(){
+        var a = $("#id").val();
+        if(a==""){
+             msg.update("ID is needed for generating the QRcode.")
+        }
+        else{
+            $.get("qrcode/",{'a':a}, function(ret){
+                msg.update("GET QRcode.")
+                var img=document.getElementById("img");
+                img.src="data:image/png;base64," +ret;
+//                 var img=new Image();
+// 　　        var imgContainer=document.getElementById("img");
+// 　　        imgContainer.appendChild(img);
+//                 console.log(ret);
+//                 img.src="data:image/png;base64," +ret;
+            })
+        }
+      });
+
+
+   });
+</script>
+
+</body>
+</html>
