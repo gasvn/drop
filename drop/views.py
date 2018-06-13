@@ -42,8 +42,9 @@ def submit(request):
 
 def genqrcode(request):
         website=str(request.GET.get('a'))
+        print("url",request.get_host())
         if(len(website) != 0):
-                img = qrcode.make(str(website))
+                img = qrcode.make(request.get_host()+"/drop/raw/"+str(website))
                 buf = BytesIO()
                 img.save(buf)
                 image_stream = buf.getvalue()
