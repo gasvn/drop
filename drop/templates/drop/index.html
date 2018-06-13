@@ -37,6 +37,7 @@
      <div class="form-group">
      <label for="name">Content</label>
      <textarea  class="form-control" id="content" name="content" placeholder="Content here."  rows=10   cols=14   onpropertychange= "this.style.posHeight=this.scrollHeight "></textarea>
+     <p id="link">Link</p>
 
      </div>
      </form>
@@ -68,6 +69,9 @@
         if(a==""){
             a="isEmpty";
         }
+        if(b==""){
+            b="isEmpty";
+        }
         $.get("submit/",{'a':a,'b':b}, function(ret){
             if(ret.cmd=="load"){
               msg.update("Message load succeed.")
@@ -77,6 +81,9 @@
               $('#id').val(ret.NoteId)
             }
         })
+        $.get("rawlink/",{'a':a}, function(ret){
+        $("#link").text(ret);
+      })
       });
 
       $("#qrcode").click(function(){

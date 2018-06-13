@@ -34,12 +34,12 @@ def submit(request):
         except:
             NoteId =hashlib.md5(timenow.encode(encoding='gb2312')).hexdigest()[8:-8]
             NoteContent=str(request.GET.get('b'))
-            NoteContent =  NoteContent.replace("\\r\\n","<br>")
-            NoteContent =  NoteContent.replace("\\s"," ")
-            q = Note(NoteId=NoteId,NoteContent=NoteContent)
-            q.save()
-            return_json = {'cmd':"write",'NoteId':NoteId}
-    print(NoteId) 
+            if NoteContent != "isEmpty":
+                NoteContent =  NoteContent.replace("\\r\\n","<br>")
+                NoteContent =  NoteContent.replace("\\s"," ")
+                q = Note(NoteId=NoteId,NoteContent=NoteContent)
+                q.save()
+                return_json = {'cmd':"write",'NoteId':NoteId}
     return HttpResponse(json.dumps(return_json), content_type='application/json')
 
 def genqrcode(request):
@@ -69,6 +69,10 @@ def raw(request,NoteId):
         result="Not exist!"
     return HttpResponse(result)
 
+def genrawlink(request):
+        noteinfo=str(request.GET.get('a'))
+        rawlink="http://"+request.get_host()+"/drop/raw/"+str(noteinfo)
+        return HttpResponse(rawlink)
 
 # def add(request,NoteId,NoteContent):
 #     q = Note(NoteId=NoteId,NoteContent=NoteContent, pub_date=timezone.now())

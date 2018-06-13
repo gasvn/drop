@@ -12,4 +12,5 @@ urlpatterns = [
     path('submit/', views.submit, name='submit'),
     path('raw/<slug:NoteId>', views.raw, name='raw'),
     path('qrcode/',views.genqrcode,name='genqrcode'),
+    path('rawlink/',views.genrawlink,name='genrawlink'),
 ]
