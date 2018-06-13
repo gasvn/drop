@@ -79,11 +79,11 @@
             }else{
               msg.update("NoteID: "+ret.NoteId)
               $('#id').val(ret.NoteId)
+              $.get("rawlink/",{'a':ret.NoteId}, function(retu){
+                       $("#link").text(retu);
+                     })
             }
         })
-        $.get("rawlink/",{'a':a}, function(ret){
-        $("#link").text(ret);
-      })
       });
 
       $("#qrcode").click(function(){
