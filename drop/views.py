@@ -34,6 +34,8 @@ def submit(request):
         except:
             NoteId =hashlib.md5(timenow.encode(encoding='gb2312')).hexdigest()[8:-8]
             NoteContent=str(request.GET.get('b'))
+            NoteContent =  NoteContent.replace("\\r\\n","<br>")
+            NoteContent =  NoteContent.replace("\\s"," ")
             q = Note(NoteId=NoteId,NoteContent=NoteContent)
             q.save()
             return_json = {'cmd':"write",'NoteId':NoteId}
@@ -60,6 +62,9 @@ def raw(request,NoteId):
     try:
         noteinfo =Note.objects.get(NoteId = NoteId)
         result=noteinfo.NoteContent
+        print("result",result)
+        result=result.replace(  "\n", "<br>");
+        result=result.replace(  " ", "&nbsp");
     except:
         result="Not exist!"
     return HttpResponse(result)
